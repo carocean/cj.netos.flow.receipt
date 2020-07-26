@@ -18,7 +18,7 @@ public class DefaultGeoTaskPorts implements IGeosphereTaskPorts {
     IRabbitMQProducer rabbitMQProducer;
 
     @Override
-    public void pushGeoDocument(ISecuritySession securitySession, String category, String receptor, String docid, long interval) throws CircuitException {
+    public void pushGeoDocument(ISecuritySession securitySession, String category, String receptor, String docid) throws CircuitException {
         AMQP.BasicProperties properties = new AMQP.BasicProperties().builder()
                 .type("/geosphere/document.mq")
                 .headers(new HashMap() {
@@ -28,7 +28,6 @@ public class DefaultGeoTaskPorts implements IGeosphereTaskPorts {
                         put("receptor", receptor);
                         put("docid", docid);
                         put("sender", securitySession.principal());
-                        put("interval", interval);
                     }
                 }).build();
         byte[] body = new byte[0];
@@ -36,7 +35,7 @@ public class DefaultGeoTaskPorts implements IGeosphereTaskPorts {
     }
 
     @Override
-    public void pushGeoDocumentLike(ISecuritySession securitySession, String category, String receptor, String docid, long interval) throws CircuitException {
+    public void pushGeoDocumentLike(ISecuritySession securitySession, String category, String receptor, String docid) throws CircuitException {
         AMQP.BasicProperties properties = new AMQP.BasicProperties().builder()
                 .type("/geosphere/document/like.mq")
                 .headers(new HashMap() {
@@ -46,7 +45,7 @@ public class DefaultGeoTaskPorts implements IGeosphereTaskPorts {
                         put("receptor", receptor);
                         put("docid", docid);
                         put("liker", securitySession.principal());
-                        put("interval", interval);
+                        
                     }
                 }).build();
         byte[] body = new byte[0];
@@ -54,7 +53,7 @@ public class DefaultGeoTaskPorts implements IGeosphereTaskPorts {
     }
 
     @Override
-    public void pushGeoDocumentUnlike(ISecuritySession securitySession, String category, String receptor, String docid, long interval) throws CircuitException {
+    public void pushGeoDocumentUnlike(ISecuritySession securitySession, String category, String receptor, String docid) throws CircuitException {
         AMQP.BasicProperties properties = new AMQP.BasicProperties().builder()
                 .type("/geosphere/document/unlike.mq")
                 .headers(new HashMap() {
@@ -64,7 +63,7 @@ public class DefaultGeoTaskPorts implements IGeosphereTaskPorts {
                         put("receptor", receptor);
                         put("docid", docid);
                         put("unliker", securitySession.principal());
-                        put("interval", interval);
+                        
                     }
                 }).build();
         byte[] body = new byte[0];
@@ -72,7 +71,7 @@ public class DefaultGeoTaskPorts implements IGeosphereTaskPorts {
     }
 
     @Override
-    public void pushGeoDocumentComment(ISecuritySession securitySession, String category, String receptor, String docid, String commentid, String comments, long interval) throws CircuitException {
+    public void pushGeoDocumentComment(ISecuritySession securitySession, String category, String receptor, String docid, String commentid, String comments) throws CircuitException {
         AMQP.BasicProperties properties = new AMQP.BasicProperties().builder()
                 .type("/geosphere/document/comment.mq")
                 .headers(new HashMap() {
@@ -83,7 +82,7 @@ public class DefaultGeoTaskPorts implements IGeosphereTaskPorts {
                         put("docid", docid);
                         put("commenter", securitySession.principal());
                         put("commentid", commentid);
-                        put("interval", interval);
+                        
                     }
                 }).build();
         byte[] body = StringUtil.isEmpty(comments) ? new byte[0] : comments.getBytes();
@@ -91,7 +90,7 @@ public class DefaultGeoTaskPorts implements IGeosphereTaskPorts {
     }
 
     @Override
-    public void pushGeoDocumentUncomment(ISecuritySession securitySession, String category, String receptor, String docid, String commentid, long interval) throws CircuitException {
+    public void pushGeoDocumentUncomment(ISecuritySession securitySession, String category, String receptor, String docid, String commentid) throws CircuitException {
         AMQP.BasicProperties properties = new AMQP.BasicProperties().builder()
                 .type("/geosphere/document/uncomment.mq")
                 .headers(new HashMap() {
@@ -102,7 +101,7 @@ public class DefaultGeoTaskPorts implements IGeosphereTaskPorts {
                         put("docid", docid);
                         put("uncommenter", securitySession.principal());
                         put("commentid", commentid);
-                        put("interval", interval);
+                        
                     }
                 }).build();
         byte[] body = new byte[0];
@@ -110,14 +109,14 @@ public class DefaultGeoTaskPorts implements IGeosphereTaskPorts {
     }
 
     @Override
-    public void pushGeoDocumentMedia(ISecuritySession securitySession, GeoDocumentMedia media, long interval) throws CircuitException {
+    public void pushGeoDocumentMedia(ISecuritySession securitySession, GeoDocumentMedia media) throws CircuitException {
         AMQP.BasicProperties properties = new AMQP.BasicProperties().builder()
                 .type("/geosphere/document/media.mq")
                 .headers(new HashMap() {
                     {
                         put("command", "pushGeoDocumentMedia");
                         put("creator", securitySession.principal());
-                        put("interval", interval);
+                        
                     }
                 }).build();
         byte[] body = new Gson().toJson(media).getBytes();

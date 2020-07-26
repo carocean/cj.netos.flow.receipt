@@ -22,8 +22,7 @@ public interface IChatroomTaskPorts extends IOpenportService {
             @CjOpenportParameter(usage = "消息类型。text|file|audio|video|image|share|email|等等", name = "contentType")
                     String contentType,
             @CjOpenportParameter(usage = "消息内容，是具有格式的内容，不同的消息类型格式不同", name = "content",in = PKeyInRequest.content)
-                    String content,
-            @CjOpenportParameter(usage = "每侦推送的时间间隔，0为立即发送", name = "interval", defaultValue = "10") long interval
+                    String content
     ) throws CircuitException;
 
 }

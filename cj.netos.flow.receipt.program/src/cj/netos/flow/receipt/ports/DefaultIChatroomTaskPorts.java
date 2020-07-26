@@ -16,7 +16,7 @@ public class DefaultIChatroomTaskPorts implements IChatroomTaskPorts {
     IRabbitMQProducer rabbitMQProducer;
 
     @Override
-    public void pushMessage(ISecuritySession securitySession, String creator, String room, String msgid, String contentType, String content, long interval) throws CircuitException {
+    public void pushMessage(ISecuritySession securitySession, String creator, String room, String msgid, String contentType, String content) throws CircuitException {
         AMQP.BasicProperties properties = new AMQP.BasicProperties().builder()
                 .type("/chat/message.mq")
                 .headers(new HashMap() {
@@ -27,7 +27,6 @@ public class DefaultIChatroomTaskPorts implements IChatroomTaskPorts {
                         put("room", room);
                         put("msgid", msgid);
                         put("contentType", contentType);
-                        put("interval", interval);
                     }
                 }).build();
         byte[] body = StringUtil.isEmpty(content) ? new byte[0] : content.getBytes();

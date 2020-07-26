@@ -6,6 +6,7 @@ import cj.studio.ecm.annotation.CjService;
 import cj.studio.ecm.annotation.CjServiceRef;
 import cj.studio.ecm.net.CircuitException;
 import cj.studio.openport.ISecuritySession;
+import cj.ultimate.gson2.com.google.gson.Gson;
 import cj.ultimate.util.StringUtil;
 import com.rabbitmq.client.AMQP;
 
@@ -116,11 +117,10 @@ public class DefaultGeoTaskPorts implements IGeosphereTaskPorts {
                     {
                         put("command", "pushGeoDocumentMedia");
                         put("creator", securitySession.principal());
-                        put("media", media);
                         put("interval", interval);
                     }
                 }).build();
-        byte[] body = new byte[0];
+        byte[] body = new Gson().toJson(media).getBytes();
         rabbitMQProducer.publish("jobCenter", properties, body);
     }
 }

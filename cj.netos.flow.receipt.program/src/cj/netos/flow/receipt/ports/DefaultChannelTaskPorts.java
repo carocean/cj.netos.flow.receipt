@@ -6,6 +6,7 @@ import cj.studio.ecm.annotation.CjService;
 import cj.studio.ecm.annotation.CjServiceRef;
 import cj.studio.ecm.net.CircuitException;
 import cj.studio.openport.ISecuritySession;
+import cj.ultimate.gson2.com.google.gson.Gson;
 import cj.ultimate.util.StringUtil;
 import com.rabbitmq.client.AMQP;
 
@@ -17,7 +18,7 @@ public class DefaultChannelTaskPorts implements IChannelTaskPorts {
     IRabbitMQProducer rabbitMQProducer;
 
     @Override
-    public void pushChannelDocument(ISecuritySession securitySession, String channel, String docid, long interval) throws CircuitException {
+    public void pushChannelDocument(ISecuritySession securitySession, String channel, String docid) throws CircuitException {
         AMQP.BasicProperties properties = new AMQP.BasicProperties().builder()
                 .type("/channel/document.mq")
                 .headers(new HashMap() {
@@ -27,7 +28,7 @@ public class DefaultChannelTaskPorts implements IChannelTaskPorts {
                         put("channel", channel);
                         put("docid", docid);
                         put("sender", securitySession.principal());
-                        put("interval", interval);
+                        
                     }
                 }).build();
         byte[] body = new byte[0];
@@ -35,17 +36,17 @@ public class DefaultChannelTaskPorts implements IChannelTaskPorts {
     }
 
     @Override
-    public void pushChannelDocumentOfPerson(ISecuritySession securitySession, String channel, String docid, String creator, long interval) throws CircuitException {
+    public void pushChannelDocumentOfPerson(ISecuritySession securitySession, String channel, String docid, String creator) throws CircuitException {
         AMQP.BasicProperties properties = new AMQP.BasicProperties().builder()
                 .type("/channel/document.mq")
                 .headers(new HashMap() {
                     {
-                        put("command", "pushChannelDocumentOfPerson");
+                        put("command", "pushChannelDocument");
                         put("creator", creator);
                         put("channel", channel);
                         put("docid", docid);
                         put("sender", securitySession.principal());
-                        put("interval", interval);
+                        
                     }
                 }).build();
         byte[] body = new byte[0];
@@ -53,7 +54,7 @@ public class DefaultChannelTaskPorts implements IChannelTaskPorts {
     }
 
     @Override
-    public void pushChannelDocumentLike(ISecuritySession securitySession, String channel, String docid, String creator, long interval) throws CircuitException {
+    public void pushChannelDocumentLike(ISecuritySession securitySession, String channel, String docid, String creator) throws CircuitException {
         AMQP.BasicProperties properties = new AMQP.BasicProperties().builder()
                 .type("/channel/document/like.mq")
                 .headers(new HashMap() {
@@ -63,7 +64,7 @@ public class DefaultChannelTaskPorts implements IChannelTaskPorts {
                         put("creator", creator);
                         put("channel", channel);
                         put("docid", docid);
-                        put("interval", interval);
+                        
                     }
                 }).build();
         byte[] body = new byte[0];
@@ -71,7 +72,7 @@ public class DefaultChannelTaskPorts implements IChannelTaskPorts {
     }
 
     @Override
-    public void pushChannelDocumentUnlike(ISecuritySession securitySession, String channel, String docid, String creator, long interval) throws CircuitException {
+    public void pushChannelDocumentUnlike(ISecuritySession securitySession, String channel, String docid, String creator) throws CircuitException {
         AMQP.BasicProperties properties = new AMQP.BasicProperties().builder()
                 .type("/channel/document/unlike.mq")
                 .headers(new HashMap() {
@@ -81,7 +82,7 @@ public class DefaultChannelTaskPorts implements IChannelTaskPorts {
                         put("creator", creator);
                         put("channel", channel);
                         put("docid", docid);
-                        put("interval", interval);
+                        
                     }
                 }).build();
         byte[] body = new byte[0];
@@ -89,7 +90,7 @@ public class DefaultChannelTaskPorts implements IChannelTaskPorts {
     }
 
     @Override
-    public void pushChannelDocumentComment(ISecuritySession securitySession, String channel, String docid, String creator, String commentid, String comments, long interval) throws CircuitException {
+    public void pushChannelDocumentComment(ISecuritySession securitySession, String channel, String docid, String creator, String commentid, String comments) throws CircuitException {
         AMQP.BasicProperties properties = new AMQP.BasicProperties().builder()
                 .type("/channel/document/comment.mq")
                 .headers(new HashMap() {
@@ -100,7 +101,7 @@ public class DefaultChannelTaskPorts implements IChannelTaskPorts {
                         put("channel", channel);
                         put("docid", docid);
                         put("commentid", commentid);
-                        put("interval", interval);
+                        
                     }
                 }).build();
         byte[] body = StringUtil.isEmpty(comments) ? new byte[0] : comments.getBytes();
@@ -108,7 +109,7 @@ public class DefaultChannelTaskPorts implements IChannelTaskPorts {
     }
 
     @Override
-    public void pushChannelDocumentUncomment(ISecuritySession securitySession, String channel, String docid, String creator, String commentid, long interval) throws CircuitException {
+    public void pushChannelDocumentUncomment(ISecuritySession securitySession, String channel, String docid, String creator, String commentid) throws CircuitException {
         AMQP.BasicProperties properties = new AMQP.BasicProperties().builder()
                 .type("/channel/document/uncomment.mq")
                 .headers(new HashMap() {
@@ -119,7 +120,7 @@ public class DefaultChannelTaskPorts implements IChannelTaskPorts {
                         put("channel", channel);
                         put("docid", docid);
                         put("commentid", commentid);
-                        put("interval", interval);
+                        
                     }
                 }).build();
         byte[] body = new byte[0];
@@ -127,18 +128,17 @@ public class DefaultChannelTaskPorts implements IChannelTaskPorts {
     }
 
     @Override
-    public void pushChannelDocumentMedia(ISecuritySession securitySession, ChannelDocumentMedia media, long interval) throws CircuitException {
+    public void pushChannelDocumentMedia(ISecuritySession securitySession, ChannelDocumentMedia media) throws CircuitException {
         AMQP.BasicProperties properties = new AMQP.BasicProperties().builder()
                 .type("/channel/document/media.mq")
                 .headers(new HashMap() {
                     {
                         put("command", "pushChannelDocumentMedia");
                         put("creator", securitySession.principal());
-                        put("media", media);
-                        put("interval", interval);
+                        
                     }
                 }).build();
-        byte[] body = new byte[0];
+        byte[] body = new Gson().toJson(media).getBytes();
         rabbitMQProducer.publish("jobCenter", properties, body);
     }
 }

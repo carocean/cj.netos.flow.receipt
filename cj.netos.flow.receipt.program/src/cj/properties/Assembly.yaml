@@ -1,0 +1,45 @@
+assemblyInfo:
+  assemblyTitle: flow.receipt
+  #assemblyResource配置web资源结构，在程序集的jar中site是是站点的根，在配置源码工程结构时site必须在资源目录下，资源目录可起任何名字，它在打包时并不会生成了jar中，因此上site指定的名字才是真正的资源根。
+  assemblyResource: site=/site;http.root=$(site)/web;http.jss=$(site)/jss/http;ws.jss=$(site)/jss/ws
+  assemblyDescription: 流转中心收单服务
+  assemblyConfiguration:
+  assemblyCompany: cj工作室
+  assemblyProduct: cj.netos.flow.receipt
+  assemblyCopyright: Copyright   2011
+  assemblyTrademark:
+  assemblyCulture:
+  guid: 4B2E9412-10CE-4C31-ACE2-2CC47C14197E
+  assemblyVersion: 1.0.0.0
+  assemblyFileVersion: 1.0.0.0
+  assemblyIcon:
+  assemblyDeveloperHome:
+entryPoint:
+  plugins:
+  activators:
+    - name: 开放口服务活动器
+      class: cj.studio.openport.OpenportEntryPointActivator
+      parameters:
+        publicAPIPath: /portsapi
+        checkAppSignStrategy:
+        checkAccessTokenStrategy: cj.netos.flow.receipt.program.CheckAccessTokenStrategy
+global:
+  default: zh_CN
+  desc: 如果系统环境要求各芯片采用的语言本芯片没有，则芯片可采用默认语言
+serviceContainer:
+  name: netContainer
+  #switchfilter用于在jss中拦截java服务，由于要匹配服务请求id，因此损耗性能，switchfilter=on为启用，switchfilter=off为关闭
+  switchFilter: off
+  #如果monitors只有单个，可以使用monitor属性
+  monitors: cj.netos.rabbitmq.DefaultRabbitMQMonitor
+  jss:
+  scans:
+    - package: cj.netos.flow.receipt.program
+      extName: .class|.json|.xml
+      exoterical: true
+    - package: cj.netos.flow.receipt.service
+      extName: .class|.json|.xml
+      exoterical: true
+    - package: cj.netos.flow.receipt.ports
+      extName: .class|.json|.xml
+      exoterical: true

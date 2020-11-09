@@ -14,8 +14,6 @@ public interface IGeosphereTaskPorts extends IOpenportService {
     @CjOpenport(usage = "推文.当前令牌持有者要推送指定的文档，该文档必须是持有者发布的文档")
     void pushGeoDocument(
             ISecuritySession securitySession,
-            @CjOpenportParameter(usage = "感知器所属分类", name = "category")
-                    String category,
             @CjOpenportParameter(usage = "感知器", name = "receptor")
                     String receptor,
             @CjOpenportParameter(usage = "文档号", name = "docid")
@@ -25,8 +23,6 @@ public interface IGeosphereTaskPorts extends IOpenportService {
     @CjOpenport(usage = "推赞。当前令牌持有者赞了指定的文档")
     void pushGeoDocumentLike(
             ISecuritySession securitySession,
-            @CjOpenportParameter(usage = "感知器所属分类", name = "category")
-                    String category,
             @CjOpenportParameter(usage = "感知器", name = "receptor")
                     String receptor,
             @CjOpenportParameter(usage = "文档号", name = "docid")
@@ -36,8 +32,6 @@ public interface IGeosphereTaskPorts extends IOpenportService {
     @CjOpenport(usage = "推取消赞。当前令牌持有者赞了指定的文档")
     void pushGeoDocumentUnlike(
             ISecuritySession securitySession,
-            @CjOpenportParameter(usage = "感知器所属分类", name = "category")
-                    String category,
             @CjOpenportParameter(usage = "感知器", name = "receptor")
                     String receptor,
             @CjOpenportParameter(usage = "文档号", name = "docid")
@@ -47,8 +41,6 @@ public interface IGeosphereTaskPorts extends IOpenportService {
     @CjOpenport(usage = "推评论.当前令牌持有者评论了指定的文档")
     void pushGeoDocumentComment(
             ISecuritySession securitySession,
-            @CjOpenportParameter(usage = "感知器所属分类", name = "category")
-                    String category,
             @CjOpenportParameter(usage = "感知器", name = "receptor")
                     String receptor,
             @CjOpenportParameter(usage = "文档号", name = "docid")
@@ -62,8 +54,6 @@ public interface IGeosphereTaskPorts extends IOpenportService {
     @CjOpenport(usage = "推取消评论.当前令牌持有者评论了指定的文档")
     void pushGeoDocumentUncomment(
             ISecuritySession securitySession,
-            @CjOpenportParameter(usage = "感知器所属分类", name = "category")
-                    String category,
             @CjOpenportParameter(usage = "感知器", name = "receptor")
                     String receptor,
             @CjOpenportParameter(usage = "文档号", name = "docid")

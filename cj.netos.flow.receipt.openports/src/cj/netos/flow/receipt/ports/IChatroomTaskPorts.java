@@ -25,4 +25,15 @@ public interface IChatroomTaskPorts extends IOpenportService {
                     String content
     ) throws CircuitException;
 
+    @CjOpenport(usage = "撤销消息")
+    void cancelMessage(
+            ISecuritySession securitySession,
+            @CjOpenportParameter(usage = "聊天室创建者", name = "creator")
+                    String creator,
+            @CjOpenportParameter(usage = "聊天室", name = "room")
+                    String room,
+            @CjOpenportParameter(usage = "消息标识", name = "msgid")
+                    String msgid
+    ) throws CircuitException;
+
 }

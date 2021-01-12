@@ -32,4 +32,20 @@ public class DefaultIChatroomTaskPorts implements IChatroomTaskPorts {
         byte[] body = StringUtil.isEmpty(content) ? new byte[0] : content.getBytes();
         rabbitMQProducer.publish("jobCenter", properties, body);
     }
+
+    @Override
+    public void cancelMessage(ISecuritySession securitySession, String creator, String room, String msgid) throws CircuitException {
+        AMQP.BasicProperties properties = new AMQP.BasicProperties().builder()
+                .type("/chat/message.mq")
+                .headers(new HashMap() {
+                    {
+                        put("command", "cancelMessage");
+                        put("creator", creator);
+                        put("sender", securitySession.principal());
+                        put("room", room);
+                        put("msgid", msgid);
+                    }
+                }).build();
+        rabbitMQProducer.publish("jobCenter", properties, new byte[0]);
+    }
 }
